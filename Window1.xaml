@@ -1,0 +1,62 @@
+﻿<Window
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2006" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+	x:Class="ListViewColumnsInColumns.Window1"
+	x:Name="Window"
+	Title="Window1"
+	Width="640" Height="480">
+
+    <Window.Resources>
+        <GridViewColumnCollection x:Key="MultiColumnCollection">
+            <GridViewColumn	Header="Title"				
+							DisplayMemberBinding="{Binding Title, Mode=OneWay}" />
+            <GridViewColumn Header="URL"				
+							DisplayMemberBinding="{Binding Url, Mode=OneWay}" />
+            <GridViewColumn Header="Link"
+							DisplayMemberBinding="{Binding Link, Mode=OneWay}" />
+        </GridViewColumnCollection>
+
+        <Style x:Key="StretchHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        </Style>
+
+        <DataTemplate x:Key="MultiColumnHeaderTemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding}" 
+				 			HorizontalAlignment="Center"/>
+                <GridViewHeaderRowPresenter Grid.Row="1" 
+		                 	HorizontalAlignment="Stretch"
+		                    Columns="{DynamicResource MultiColumnCollection}"/>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="MultiColumnCellTemplate">
+            <Grid>
+                <GridViewRowPresenter HorizontalAlignment="Stretch"
+					Columns="{StaticResource MultiColumnCollection}"/>
+            </Grid>
+        </DataTemplate>
+
+    </Window.Resources>
+
+    <Grid x:Name="LayoutRoot">
+        <ListView ItemsSource="{Binding Datas}" 
+				  IsSynchronizedWithCurrentItem="True">
+            <ListView.View>
+                <GridView ColumnHeaderContainerStyle="{StaticResource StretchHeaderStyle}">
+                    <GridViewColumn Header="No"
+                                    DisplayMemberBinding="{Binding No}"/>
+                    <GridViewColumn Header="Details"
+						HeaderTemplate="{StaticResource MultiColumnHeaderTemplate}"
+						CellTemplate="{StaticResource MultiColumnCellTemplate}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+    </Grid>
+</Window>
